@@ -1,3 +1,9 @@
+---
+title: Lab 6: Childcare Costs in California
+aithor: Danny Morehouse
+
+---
+
 ## The Data
 
 In this lab we're going look at the median weekly cost of childcare in
@@ -10,6 +16,8 @@ The data come to us from [TidyTuesday](https://github.com/rfordatascience/tidytu
 ```{r}
 #| label: setup
 
+library(tidyverse)
+library(dplyr)
 ```
 
 ```{r}
@@ -21,6 +29,8 @@ counties <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 ```
 
 **1. Briefly describe the dataset (~ 4 sentences). What information does it contain?**
+
+The county_fips_code represents each county within the state of California. Within each county, there is a variety of data points within the collection year (2008-2018), involving unemployment, labor force participation, median household income, dynamic of the household, and more. The data set includes unique variables like households with children above/below the age of 6, or employment of teenagers in certain fields within the county (age 16 or old). The data type of all of the variables within the data set is double. 
 
 ## California Childcare Costs
 
