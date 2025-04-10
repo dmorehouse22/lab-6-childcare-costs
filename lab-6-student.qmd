@@ -1,8 +1,8 @@
 ---
-title: Lab 6: Childcare Costs in California
-aithor: Danny Morehouse
-
+title: Lab 6, Childcare Costs in California
+author: Danny Morehouse
 ---
+
 
 ## The Data
 
@@ -30,7 +30,7 @@ counties <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 
 **1. Briefly describe the dataset (~ 4 sentences). What information does it contain?**
 
-The county_fips_code represents each county within the state of California. Within each county, there is a variety of data points within the collection year (2008-2018), involving unemployment, labor force participation, median household income, dynamic of the household, and more. The data set includes unique variables like households with children above/below the age of 6, or employment of teenagers in certain fields within the county (age 16 or old). The data type of all of the variables within the data set is double. 
+The county_fips_code represents each county within each state in the US. Within each county, there is a variety of data points within the collection year (2008-2018), involving unemployment, labor force participation, median household income, dynamic of the household, and more. The data set includes unique variables like households with children above/below the age of 6, or employment of teenagers in certain fields within the county (age 16 or old). The data type of all of the variables within the data set is double. 
 
 ## California Childcare Costs
 
@@ -43,6 +43,10 @@ Let's start by focusing only on California.
 ```{r}
 #| label: ca-childcare-costs
 
+ca_childcare <- childcare_costs |>
+  select(county_fips_code, study_year, mhi_2018, mcsa, mc_infant, mc_toddler, mc_preschool) |>
+  left_join(counties, by = "county_fips_code") |>
+  filter(county_fips_code >= 6000 & county_fips_code <= 6115)
 ```
 
 **3. Using a function from the `forcats` package, complete the code below to create a new variable where each county is categorized into one of the [10 Census regions](https://census.ca.gov/regions/) in California. Use the Region description (from the plot), not the Region number. An example region has been started for you.**  
@@ -54,10 +58,18 @@ Let's start by focusing only on California.
 
 ca_childcare <- ca_childcare |> 
   mutate(county_name = str_remove(county_name, " County")) |> 
-  mutate(region = fct_______(county_name,
-    'Superior California' = c("Butte", "Colusa", "El Dorado". ...),
-     ...
-    ))
+  mutate(region = fct_collapse(county_name,
+    'Superior California' = c("Butte", "Colusa", "El Dorado", "Glenn", "Lassen", "Modoc", "Nevada", "Placer", "Plumas", "Sacramento", "Shasta", "Sierra", "Siskiyou", "Sutter", "Tehama", "Yolo", "Yuba"),
+    'North Coast' = c("Del Norte", "Humboldt", "Lake", "Mendocino", "Napa", "Sonoma", "Trinity"),
+    'San Francisco Bay Area' = c("Alameda", "Contra Costa", "Marin", "San Francisco", "San Mateo", "Santa Clara", "Solano"),
+    'Northern San Joaquin Valley' = c("Alpine", "Amador", "Calaveras", "Madera", "Mariposa", "Merced", "Mono", "San Joaquin", "Stanislaus", "Tuolumne"),
+    'Central Coast' = c("Monterey", "San Benito", "San Luis Obispo", "Santa Barbara", "Santa Cruz", "Ventura"),
+    'Southern San Joaquin Valley' = c("Fresno", "Inyo", "Kern", "Kings", "Tulare"),
+    'Inland Empire' = c("Riverside", "San Bernardino"),
+    'Los Angeles County' = c("Los Angeles"),
+    'Orange County' = c("Orange"),
+    'San Diego - Imperial' = c("Imperial", "San Diego")
+  ))
 ```
 
 
