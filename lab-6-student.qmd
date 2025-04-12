@@ -115,8 +115,18 @@ ca_childcare |>
 
 ```{r}
 #| label: recreate-plot
+# Asked chatgpt for help with the 3 side-by-side figures. My first attempt had all 3 age groups for the y-axis aesthetic, which was incorrect. The suggestion was to pivot the selected data into a wider format, combining all of the age groups into 1 column that can be used for the graph. It also suggested the facet_wrap to allow the 3 figures to be created next to each other. Sorry for the excessive use of chatgpt to check my work, as a first time R-user, this has been a lot of information to take in. 
 
-
+ca_childcare |>
+  select(region, study_year, mc_infant, mc_toddler, mc_preschool) |>
+  pivot_longer(cols = starts_with("mc_"),
+               names_to = "age_group",
+               values_to = "weekly_price") |>
+  ggplot(aes(x = study_year, y = weekly_price, color = region)) +
+  geom_line() +
+  facet_wrap(~ age_group, nrow = 1) +
+  labs(title = "Weekly Median Price for Center-Based Childcare ($)",
+       x = "Study Year",
+       color = "California Region") + 
+  geom_smooth()
 ```
-
-
